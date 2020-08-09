@@ -1,0 +1,4 @@
+speed =6000
+Time =200
+//example:"speed =12"(no space)(2000: default game savedlevel)
+//if the game have crashed then change the time play ( [time =10]    {time = 1 second} )

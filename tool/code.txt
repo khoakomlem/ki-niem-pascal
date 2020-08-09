@@ -1,0 +1,15 @@
+gotoxy(x+14,y+1);write(' ',char(202),char(202),char(202),char(202),' ');
+gotoxy(x+10,y+2);write(' ',char(202),char(202),char(202),char(202),'    ',char(202),'    ',char(207),char(207),' ');
+gotoxy(x+9,y+3);write(' ',char(178),char(202),char(178),char(178),char(178),char(178),char(178),char(178),char(178),char(178),char(178),char(178),'    ',char(207),char(207),char(207),' ');
+gotoxy(x+7,y+4);write(' ',char(178),char(178),char(202),'          ',char(178),char(178),'     ',char(207),' ');
+gotoxy(x+7,y+5);write(' ',char(178),' ',char(202),'           ',char(178),'      ',char(207),' ');
+gotoxy(x+6,y+6);write(' ',char(178),char(178),' ',char(202),'           ',char(178),'      ',char(207),' ');
+gotoxy(x+6,y+7);write(' ',char(178),'  ',char(202),'           ',char(178),'      ',char(207),' ');
+gotoxy(x+6,y+8);write(' ',char(178),'  ',char(202),char(202),'          ',char(178),'      ',char(207),' ');
+gotoxy(x+6,y+9);write(' ',char(178),char(178),'            ',char(178),char(178),'      ',char(207),' ');
+gotoxy(x+7,y+10);write(' ',char(178),char(178),'          ',char(178),char(178),'      ',char(207),' ');
+gotoxy(x+9,y+11);write(' ',char(178),char(178),char(178),char(178),'     ',char(178),char(178),'      ',char(207),char(207),' ');
+gotoxy(x+13,y+12);write(' ',char(178),char(178),char(178),char(178),char(178),char(178),'      ',char(207),char(207),' ');
+gotoxy(x+21,y+13);write(' ',char(207),char(207),char(207),char(207),' ');
+gotoxy(x+1,y+14);write(' ',char(207),char(207),'           ',char(207),char(207),char(207),char(207),char(207),char(207),char(207),char(207),' ');
+gotoxy(x+2,y+15);write(' ',char(207),char(207),char(207),char(207),char(207),char(207),char(207),char(207),char(207),char(207),char(207),char(207),' ');

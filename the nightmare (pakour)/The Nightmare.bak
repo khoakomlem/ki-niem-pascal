@@ -1,0 +1,543 @@
+uses crt,mmsystem,mouse,sysutils;
+var i,j,error,xm,ym,score,last,x,y,time,moveframe,
+  lastx,lasty,gvtframe,speedframe,spawnx,spawny,heart,level,say_n,timesay,wood_n,bubble,bubbleframe:longint;
+  f:text;
+  a,b:array[-100..100,-100..100] of char;
+  timewood:array[-100..100,-100..100] of longint;
+  xwood,ywood:array[0..100] of integer;
+  mapstr,folder,status,text:string;
+  key:char;
+  mouseevent:tmouseevent;
+  win,death,move_L,move_R,jump,swim,lock,playwoodsound,kt:boolean;
+  chose:array[0..5] of boolean;
+  say:array[0..100] of string;    scan_say:array[0..100] of boolean;
+///////////////////////////////////////////////////////////////////////////////////////
+Procedure Playmusic(name: pchar; loop: boolean);
+begin
+  if status='ON' then
+  if FileExists(folder+name) then
+  begin
+    if loop then
+    PlaySound(name,0,SND_ASYNC or SND_LOOP)
+    else
+    PlaySound(name,0,SND_ASYNC);
+  end;
+end;
+procedure camera(dir:string);
+begin
+  case dir of
+    'up': //
+    begin
+      gotoxy(80,25);
+      for i:=1 to 25 do
+      begin
+        for j:=1 to 80 do
+        write(' ');
+        delay(10);
+      end;
+    end;
+    'down': //
+    begin
+      gotoxy(1,1);
+      for i:=1 to 25 do
+      begin
+        delay(10);
+        insline;
+      end;
+    end;
+  end;
+end;
+procedure checksave;
+begin
+  if level<>1 then
+  begin
+    clrscr;
+    gotoxy(35,12);
+    write('CONTINUE?');
+    gotoxy(20,13);
+    write('Press [y] to continue, [n] to play a new ');
+    repeat
+      key:=readkey
+    until (key='y') or (key='n');
+    if key='n' then
+    begin
+      level:=1;
+      score:=0;
+      heart:=3;
+    end;
+  end;
+end;
+procedure savegame;
+begin
+  clrscr;
+  textcolor(14);
+  gotoxy(35,12);
+  write('SAVING . . .');
+  assign(f,'checkpoint.save');
+  rewrite(f);
+  writeln(f,level);
+  writeln(f,heart);
+  writeln(f,score);
+  close(f);
+end;
+///////////////////////////////////////////////////////////////////////////////////////
+procedure WriteSpecialChar(ch:string);
+begin
+  case ch of
+    '0':write(' ');                                     {air}
+    '1': //
+    begin
+      textcolor(7);write(char(177));
+    end;        {wall}
+    '2': //
+    begin
+      textcolor(red);write(char(219));
+    end;      {lava}
+    '3': //
+    begin
+      textcolor(lightblue);write(char(219));
+    end;     {ice}
+    '4': //
+    begin
+      textcolor(14);write(char(30));
+    end;        {spike}
+    '5': //
+    begin
+      textcolor(green);write(char(220));
+    end;    {finish}
+    '6': //
+    begin
+      textcolor(red);write(char(3));
+    end;        {heart}
+    '7': //
+    begin
+      textcolor(14);write(char(167));
+    end;       {score}
+    '8': //
+    begin
+      textcolor(blue);write(char(176));
+    end;{water}
+    '9': //
+    begin
+      textcolor(brown);write(char(176));
+    end;    {old wood}
+  end;
+end;
+///////////////////////////////////////////////////////////////////////////////////////
+procedure errors;
+begin
+  window(10,4,70,21);
+  write('OOPS, An error occurred while running this program or could not find the important file. Please reinstall this program! Press ENTER key to exit.');
+  playmusic('sound\beep.wav',false);
+  repeat
+    key:=readkey;
+  until key=#13;
+  halt;
+end;
+///////////////////////////////////////////////////////////////////////////////////////
+procedure initializing_screen(level:integer;check:boolean);
+begin
+//return value
+  for i:=1 to wood_n do timewood[ywood[i],xwood[i]]:=0;
+  wood_n:=0;
+  if swim then
+  begin
+    swim:=false;speedframe:=speedframe div 2;
+  end;
+  playwoodsound:=false;
+  kt:=false;
+  if lock then
+  begin
+    lock:=false;speedframe:=speedframe * 2;
+  end;
+  move_L:=false;
+  move_R:=false;
+  lastx:=1;lasty:=1;
+  clrscr;
+//read map and write
+  str(level,text);
+  assign(f, 'level\'+text+'.lvl');
+{$I-}reset(f);{$I+}
+  if IOresult<>0 then errors;
+  for i:=1 to 22 do
+  begin
+    readln(f,mapstr);
+    for j:=1 to length(mapstr)do
+    begin
+      if mapstr[j]<>'x' then a[i,j]:=mapstr[j] else
+      begin
+        a[i,j]:='0';scan_say[j]:=true;
+      end;
+      gotoxy(j,i);
+      WriteSpecialChar(a[i,j]);
+    end;
+  end;
+  read(f,x);readln(f,y);
+  spawnx:=x;spawny:=y;
+//read the funny say
+  for i:=1 to 100 do if scan_say[i] then readln(f,say[i]);
+  close(f);
+end;
+///////////////////////////////////////////////////////////////////////////////////////
+procedure credit;
+begin
+end;
+///////////////////////////////////////////////////////////////////////////////////////
+procedure guide;
+begin
+end;
+///////////////////////////////////////////////////////////////////////////////////////
+procedure detail;
+begin
+  textcolor(red);
+  gotoxy(1,24);
+  write('Heart: ');
+  for i:=1 to 5 do if heart>=i then write(char(3),' ')
+  else write('  ');
+  gotoxy(20,24);
+  textcolor(blue);
+  for i:=1 to 10 do if bubble>=i then write(char(9)) else write(' ');
+  textcolor(14);
+  gotoxy(1,25);write('Score :',score);
+end;
+procedure menu;
+procedure play;
+begin
+  clrscr;
+  playmusic('sound\next.wav',false);
+  initializing_screen(level);
+  delay(500);
+  detail;
+  repeat
+    if keypressed then
+    begin
+      key:=readkey;
+      if not lock then
+      case key of
+        #77: //
+        begin
+          move_R:=true;move_L:=false;
+        end;
+        #75: //
+        begin
+          move_L:=true;move_R:=false;
+        end;
+        #27: //
+        begin
+          savegame;menu;
+        end;
+        #72,#80: //
+        begin
+          move_L:=false;move_R:=false;
+        end;
+      end;
+      if (key=#32) and ((jump=false) or swim) then
+      begin
+        jump:=true;time:=3;if swim then dec(time);
+      end;
+    end;
+//gravity
+    if (a[y+1,x]='1') or (a[y+1,x]='3') or (a[y+1,x]='9') then jump:=false;
+    if (a[y+1,x]='0') or (a[y+1,x]='8') or (a[y+1,x]='2') or (a[y+1,x]='4') then jump:=true;
+    if (time<1) and jump then inc(gvtframe) else gvtframe:=0;
+    if gvtframe>speedframe then
+    begin
+      inc(y);gvtframe:=0;
+    end;
+    inc(moveframe);
+    if moveframe>speedframe then
+    begin
+      if time>0 then
+      begin
+        dec(time);dec(y);if (a[y,x]='1') or (a[y,x]='3') or (a[y,x]='9') then
+        begin
+          inc(y);time:=0;
+        end;
+      end;
+      if move_L then
+      begin
+        dec(x);if (a[y,x]='1') or (a[y,x]='3') or (a[y,x]='9') then inc(x);
+      end
+      else if move_R then
+      begin
+        inc(x);if (a[y,x]='1') or (a[y,x]='3') or (a[y,x]='9') then dec(x);
+      end;
+      moveframe:=0;
+    end;
+//sound
+//
+    if (lastx<>x) or (lasty<>y) then
+    begin
+      textcolor(7);
+      gotoxy(x,y);
+      write(char(2));
+      gotoxy(lastx,lasty);
+      WriteSpecialChar(a[lasty,lastx]);
+      lastx:=x;
+      lasty:=y;
+    end;
+// enter regeon and say something
+    if scan_say[x] then
+    begin
+      gotoxy(5,23);
+      write('                                                                       ');
+      gotoxy(5,23);
+      textbackground(white);
+      textcolor(black);
+      write(say[x]);
+      timesay:=200000;
+      textbackground(black);
+      scan_say[x]:=false;
+    end;
+    if timesay>0 then
+    begin
+      dec(timesay);
+      if timesay=0 then
+      begin
+        gotoxy(5,23);
+        clreol;
+        detail;
+      end;
+    end;
+//enter things
+    case a[y,x] of
+      '2','4': //
+      begin
+        gotoxy(x,y);write(char(206));
+        playmusic('sound\spike.wav',false);
+        delay(1000);
+        dec(heart);
+        x:=spawnx;
+        y:=spawny;
+        if heart<1 then death:=true else
+        play;
+      end;
+      '5': //
+      begin
+        inc(level);
+        inc(score,1000);
+        clrscr;
+        move_L:=false;
+        move_R:=false;
+        play;
+      end;
+      '6': //
+      begin
+        inc(heart);
+        a[y,x]:=a[y,x+1];
+        detail;
+      end;
+      '7': //
+      begin
+        inc(score,100);
+        a[y,x]:=a[y,x+1];
+        detail;
+      end;
+      '8':    if not swim then
+      begin
+        bubble:=10;
+        swim:=true;
+        detail;
+        speedframe:=speedframe*2;
+        playmusic('sound\drown.wav',true);
+      end
+      else
+      begin
+        inc(bubbleframe);
+        if bubbleframe >15000 then
+        begin
+          dec(bubble);detail;bubbleframe:=0;
+        end;
+        if bubble<1 then death:=true;
+      end;
+    end;
+//fix water
+    if (a[y,x]<>'8') and swim then
+    begin
+      PlaySound(nil,0,SND_ASYNC);
+      swim:=false;
+      speedframe:=speedframe div 2;
+      bubble:=10;
+      detail;
+    end;
+//above things
+    if (jump=false) and (a[y+1,x]='3') and (move_L or move_R) and (lock=false) then
+    begin
+      lock:=true;speedframe:=speedframe div 2;
+    end;
+    if (a[y+1,x]<>'3') and lock then
+    begin
+      lock:=false;speedframe:=speedframe * 2;
+    end;
+    if (a[y+1,x]='9') and (timewood[y+1,x]=0) then
+    begin
+      inc(wood_n);
+      xwood[wood_n]:=x;
+      ywood[wood_n]:=y+1;
+      timewood[ywood[wood_n],xwood[wood_n]]:=18000;
+      if not playwoodsound then
+      begin
+        playmusic('sound\wood.wav',true);
+        playwoodsound:=true;
+        kt:=false;
+      end;
+    end;
+    playwoodsound:=false;
+    for i:=1 to wood_n do
+    if timewood[ywood[i],xwood[i]]>0 then
+    begin
+      playwoodsound:=true;
+      dec(timewood[ywood[i],xwood[i]]);
+      if timewood[ywood[i],xwood[i]]=10000 then
+      begin
+        gotoxy(xwood[i],ywood[i]);
+        write(char(176));
+      end;
+      if timewood[ywood[i],xwood[i]]=0 then
+      begin
+        gotoxy(xwood[i],ywood[i]);
+        write(' ');
+        a[ywood[i],xwood[i]]:='0';
+      end;
+    end;
+    if (not kt) and (not playwoodsound) then
+    begin
+      playsound(nil,0,SND_ASYNC);
+      kt:=true;
+    end;
+//clear wood sound
+  until death or win;
+  if death then
+  begin
+    death:=false;
+    playmusic('sound\game_over.wav',false);
+    delay(500);
+    camera('up');
+    heart:=3;
+    textcolor(red);
+    gotoxy(35,12);
+    write('GAME OVER');
+    gotoxy(34,13);
+    textcolor(white);
+    write('Total Score');
+    str(score,text);
+    gotoxy((80-length(text)) div 2,14);
+    write(score);
+    delay(2500);
+    score:=0;
+    savegame;
+    menu;
+  end
+  else
+  if win then
+  begin
+    playmusic('sound\game_over.wav',false);
+    camera('down');
+    textcolor(green);
+    gotoxy(35,12);
+    write('GAME OVER');
+    gotoxy(34,13);
+    textcolor(white);
+    write('Total Score');
+    str(score,text);
+    gotoxy((80-length(text)) div 2,14);
+    write(score);
+    delay(2000);
+    menu;
+  end;
+end;
+procedure tile(x,y:integer);
+begin
+  textcolor(white);
+  textbackground(red);
+  gotoxy(x,y);
+  write(' _____________________ ');
+  gotoxy(x,y+1);
+  write('|    THE NIGHTMARE    |');
+  gotoxy(x,y+2);
+  write('|_____________________|');
+end;
+///////////////////////////////////////////////////////////////////////////////////////
+{menu}
+begin
+//
+  playmusic('sound\intro.wav',true);
+  randomize;
+  chose[1]:=true;
+  last:=1;
+  initmouse;
+  tile(31,5);
+  textcolor(7);
+  repeat
+    xm:=getmousex;
+    ym:=getmousey;
+    if (xm>=34) and (xm<=43) and (ym<=12) and (ym>=9) then
+    begin
+      chose[last]:=false;chose[ym-8]:=true;last:=ym-8;
+    end;
+    textcolor(black);
+    if chose[1] then textbackground(green) else textbackground(red);gotoxy(35,10);write('  PLAY      ');
+    if chose[2] then textbackground(green) else textbackground(red);gotoxy(35,11);write('  SOUND[',status,']');if status='ON' then write(' ');
+    if chose[3] then textbackground(green) else textbackground(red);gotoxy(35,12);write('  CREDIT    ');
+    if chose[4] then textbackground(green) else textbackground(red);gotoxy(35,13);write('  QUIT      ');
+    if pollmouseevent(mouseevent) then getmouseevent(mouseevent);
+    if (getmousebuttons=mouseleftbutton) and (xm>=34) and (xm<=43) and (ym<=12) and (ym>=9) then
+    begin
+      tile(31,5);
+      textcolor(yellow);
+      textcolor(7);
+      playmusic('sound\begin.wav',false);
+      donemouse;
+      case ym-8 of
+        1: //
+        begin
+          camera('down');textbackground(black);textcolor(7);PlaySound(nil,0,SND_ASYNC);delay(700);checksave;play;
+        end;
+        2:if status='ON' then
+        begin
+          status:='OFF';PlaySound(nil,0,SND_ASYNC);
+        end
+        else
+        begin
+          status:='ON';playmusic('sound\intro.wav',true);
+        end;
+        3:credit;
+        4:halt;
+      end;
+      initmouse;
+    end;
+  until (1=2);
+end;
+///////////////////////////////////////////////////////////////////////////////////////
+begin
+  lastx:=1;lasty:=1;
+  heart:=3;
+  level:=1;
+  bubble:=10;
+  cursoroff;{IMPORTANT}
+  jump:=true;
+  status:='ON';
+  assign(f,'setting.conf');
+  reset(f);
+  read(f,text);
+  val(text,speedframe,error);
+  if error<>0 then errors;
+  close(f);
+  textbackground(white);
+  textcolor(black);
+  clrscr;
+  folder:=GetCurrentDir+'\';
+///read checkpoint
+  assign(f,'checkpoint.save');
+{$I-}reset(f);{$I+}
+  val(text,level,error);
+  if error<>0 then errors;
+  if IOresult<>0 then errors;
+  readln(f,level);
+  readln(f,heart);
+  readln(f,score);
+  close(f);
+//main
+  textcolor(white);
+  menu;
+end.

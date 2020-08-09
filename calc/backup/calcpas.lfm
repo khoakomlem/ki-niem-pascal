@@ -1,0 +1,319 @@
+object Form1: TForm1
+  Left = 263
+  Height = 317
+  Top = 240
+  Width = 211
+  Caption = 'Caculator :D'
+  ClientHeight = 317
+  ClientWidth = 211
+  Color = 13295012
+  OnCreate = FormCreate
+  LCLVersion = '1.8.0.6'
+  object BitBtn1: TBitBtn
+    Left = 1
+    Height = 39
+    Top = 264
+    Width = 88
+    Caption = '0'
+    OnClick = BitBtn1Click
+    TabOrder = 0
+  end
+  object BitBtn2: TBitBtn
+    Left = 0
+    Height = 32
+    Top = 224
+    Width = 40
+    Caption = '1'
+    OnClick = BitBtn2Click
+    TabOrder = 1
+  end
+  object BitBtn3: TBitBtn
+    Left = 47
+    Height = 32
+    Top = 224
+    Width = 41
+    Caption = '2'
+    OnClick = BitBtn3Click
+    TabOrder = 2
+  end
+  object BitBtn4: TBitBtn
+    Left = 96
+    Height = 32
+    Top = 224
+    Width = 41
+    Caption = '3'
+    OnClick = BitBtn4Click
+    TabOrder = 3
+  end
+  object BitBtn5: TBitBtn
+    Left = 144
+    Height = 32
+    Top = 184
+    Width = 32
+    Caption = '-'
+    OnClick = BitBtn5Click
+    TabOrder = 4
+  end
+  object BitBtn6: TBitBtn
+    Left = 177
+    Height = 32
+    Top = 184
+    Width = 32
+    Caption = '+'
+    OnClick = BitBtn6Click
+    TabOrder = 5
+  end
+  object BitBtn7: TBitBtn
+    Left = 0
+    Height = 32
+    Top = 184
+    Width = 41
+    Caption = '4'
+    OnClick = BitBtn7Click
+    TabOrder = 6
+  end
+  object BitBtn8: TBitBtn
+    Left = 0
+    Height = 32
+    Top = 144
+    Width = 41
+    Caption = '7'
+    OnClick = BitBtn8Click
+    TabOrder = 7
+  end
+  object BitBtn9: TBitBtn
+    Left = 47
+    Height = 32
+    Top = 144
+    Width = 41
+    Caption = '8'
+    OnClick = BitBtn9Click
+    TabOrder = 8
+  end
+  object BitBtn10: TBitBtn
+    Left = 48
+    Height = 32
+    Top = 184
+    Width = 41
+    Caption = '5'
+    OnClick = BitBtn10Click
+    TabOrder = 9
+  end
+  object BitBtn11: TBitBtn
+    Left = 96
+    Height = 32
+    Top = 184
+    Width = 41
+    Caption = '6'
+    OnClick = BitBtn11Click
+    TabOrder = 10
+  end
+  object BitBtn12: TBitBtn
+    Left = 96
+    Height = 32
+    Top = 144
+    Width = 41
+    Caption = '9'
+    OnClick = BitBtn12Click
+    TabOrder = 11
+  end
+  object BitBtn13: TBitBtn
+    Left = 144
+    Height = 79
+    Top = 224
+    Width = 65
+    Caption = '='
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -27
+    Font.Name = 'Cambria'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    OnClick = BitBtn13Click
+    ParentFont = False
+    TabOrder = 12
+  end
+  object StaticText1: TStaticText
+    Left = 176
+    Height = 17
+    Top = 304
+    Width = 46
+    Caption = 'Ver 0.3'
+    TabOrder = 13
+  end
+  object CheckBox1: TCheckBox
+    Left = 0
+    Height = 19
+    Top = 88
+    Width = 204
+    Caption = 'rounded to the         decimal places'
+    Enabled = False
+    OnChange = CheckBox1Change
+    OnClick = CheckBox1Click
+    TabOrder = 14
+  end
+  object edit: TEdit
+    Left = 96
+    Height = 19
+    Top = 88
+    Width = 24
+    Alignment = taCenter
+    AutoSize = False
+    Enabled = False
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -13
+    Font.Name = 'Cambria'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    Font.Style = [fsBold]
+    MaxLength = 10
+    NumbersOnly = True
+    ParentFont = False
+    TabOrder = 15
+    Text = '0'
+  end
+  object Button1: TButton
+    Left = 96
+    Height = 39
+    Top = 264
+    Width = 41
+    Caption = '.'
+    Color = clAqua
+    Enabled = False
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -13
+    Font.Name = 'Arial'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    Font.Style = [fsBold]
+    OnClick = Button1Click
+    ParentFont = False
+    TabOrder = 16
+  end
+  object Button3: TLabel
+    Left = 8
+    Height = 32
+    Top = 56
+    Width = 194
+    Alignment = taRightJustify
+    AutoSize = False
+    Caption = '0'
+    Color = 16777066
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -24
+    Font.Name = 'Arial'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentBidiMode = False
+    ParentColor = False
+    ParentFont = False
+    Transparent = False
+  end
+  object BitBtn14: TBitBtn
+    Left = 144
+    Height = 32
+    Top = 144
+    Width = 32
+    Caption = '/'
+    OnClick = BitBtn14Click
+    TabOrder = 17
+  end
+  object BitBtn15: TBitBtn
+    Left = 177
+    Height = 32
+    Top = 144
+    Width = 32
+    Caption = '*'
+    OnClick = BitBtn15Click
+    TabOrder = 18
+  end
+  object Button2: TLabel
+    Left = 8
+    Height = 32
+    Top = 24
+    Width = 196
+    Alignment = taRightJustify
+    AutoSize = False
+    Caption = ' '
+    Color = 16777066
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -27
+    Font.Name = 'Arial'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentBidiMode = False
+    ParentColor = False
+    ParentFont = False
+    Transparent = False
+  end
+  object Image1: TImage
+    Left = 1
+    Height = 31
+    Top = 105
+    Width = 40
+    OnClick = Image1Click
+    Picture.Data = {
+      1754506F727461626C654E6574776F726B477261706869632803000089504E47
+      0D0A1A0A0000000D494844520000002800000020080600000060AD3A00000000
+      017352474200AECE1CE90000000467414D410000B18F0BFC6105000000097048
+      597300000EC400000EC401952B0E1B000002BD494441545847CD98BB6E1A4114
+      860F889B8263132E053288028152F110E952A64048790F1A2810856928D3E401
+      222B88226592260F10A58965A1D888C2C2920B50308E0960108EFE61663DBB19
+      965DB3097CD2AF999DDD3DE79F1B3BB6EB5DE7EB3DED309AC1F6872F34E90D68
+      3A9DB21B9B50AD56A952A968A55DFC7E3F0562CF28F3EAC5D2E0D9FBCF14DDDB
+      A742A140D168943F669FD168C46B7F130C06796D3DFD7E9F1A8D06F56F6F9606
+      BFBF6D52B158A450284493C9843F669DFB7B6BABC4E572F19A39814080AEAFAF
+      A95EAF931B0DB3D98CC2E1F03F356707F8801FF8620601123D467650BD6F26A0
+      19DC55740655BD30CA692E2E2E4CF3386AF0E0E080D7AC934AA5D8E65995C791
+      2986B1C7989371BBD556B456B85E2C16A6320611C686C321D326CCE7735D2E31
+      8AB64610418093C6D6A13328AF01952291C85A63C2BC5D1973092C19C4E70FEA
+      F57A4CAB10C6AD48C412F18C3905A6531C8BC5988CC6F0D30009ACD4C1DDDD9D
+      26ABB06FF1B737C754ABD5E8EAEA8A35A6D36956763A1D56CA981D08EC201F1E
+      90CF982B1E8F53A954528FA0CA98D358EDA8CEA0BCCDDBED36EB19846B04746A
+      F4048887D840CE2DDA80E91A84492893C9502E97E3ADCE321E8F794D8D6E0D5E
+      5E5EF2663D38FEE08C96CD66D9F5C9C9092B8D6CD289F3F3735E5B924824D81A
+      D40C1E1D1D51B7DBE5B71F50ED3861C46814EDABCC9BE1F3F978ED81643249E5
+      72D97C8A8178590E0213100C3931F5663F3B2B37892CA00AE294518FC7A3CC09
+      D68E204000B9340293AD568B5F59635D4C8166109F17632F64E124831288530D
+      4A21DC3B3D3DD5EEAD431C3CE41CB2C4E7CED214CB12CF8952253BA8DE8704D6
+      BABB457453BC6B02CCA0D7EBA5C16040878787CAE1FEDF820FF8812FFEAF8F4F
+      147EF294F2F93C3B3C6E1B9C179BCD26FDFCFD6B69108D3F8E3FD2F4E696FD35
+      BF6D3072FEFD3D7AFEFAE5AE6F12A23FC529C8DB42C2F5DE0000000049454E44
+      AE426082
+    }
+  end
+  object BitBtn16: TBitBtn
+    Left = 144
+    Height = 32
+    Top = 104
+    Width = 65
+    Caption = 'Solve'
+    Enabled = False
+    OnClick = BitBtn9Click
+    TabOrder = 19
+  end
+  object BitBtn17: TBitBtn
+    Left = 96
+    Height = 32
+    Top = 104
+    Width = 41
+    Caption = 'X'
+    Enabled = False
+    OnClick = BitBtn9Click
+    TabOrder = 20
+  end
+  object BitBtn18: TBitBtn
+    Left = 48
+    Height = 32
+    Top = 104
+    Width = 41
+    Caption = 'SQRT'
+    Enabled = False
+    OnClick = BitBtn9Click
+    TabOrder = 21
+  end
+  object Timer1: TTimer
+    Interval = 100
+    OnTimer = Timer1Timer
+    left = 88
+  end
+end

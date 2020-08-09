@@ -1,0 +1,3 @@
+AI Speed =15000
+AI Shooting speed =2000
+AI number =3

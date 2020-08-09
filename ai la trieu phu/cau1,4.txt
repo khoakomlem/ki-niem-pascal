@@ -1,0 +1,1 @@
+Don vi do dung luong bo nho may tinh nao lon nhat?     A.Bytes     B.Megabytes(MB)     C.GIgabytes(GB)     D.Terabytes(TB)
