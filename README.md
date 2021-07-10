@@ -1,3 +1,3 @@
 # ki-niem-pascal
 kỉ niệm với pascal ;(<br>
-my email: visualpascalc@gmail.com
+my email: khoakomlem@gmail.com
