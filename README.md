@@ -1,3 +1,2 @@
 # ki-niem-pascal
-kỉ niệm với pascal ;(<br>
-my email: khoakomlem@gmail.com
+Đây là tất cả các sản phẩm kỉ niệm từ lớp 6 đến lớp 9 của mình
